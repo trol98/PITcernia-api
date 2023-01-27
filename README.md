@@ -76,4 +76,4 @@ Nest is [MIT licensed](LICENSE).
 
 - [@trol98](https://www.github.com/trol98/)
 - [@sok205](https://www.github.com/sok205/)
-- [@sfiertson]((https://github.com/Sfiertson)
+- [@sfiertson](https://github.com/Sfiertson)

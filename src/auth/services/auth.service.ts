@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
 import { UserService } from 'src/user/services/user.service';
 import { RegisterDto } from '../dto/register.dto';
 import * as bcrypt from 'bcrypt';
-
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}

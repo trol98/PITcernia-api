@@ -36,4 +36,15 @@ export class UserService {
       HttpStatus.NOT_FOUND,
     );
   }
+
+  async getByID(id: number) {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (user) {
+      return user;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
 }

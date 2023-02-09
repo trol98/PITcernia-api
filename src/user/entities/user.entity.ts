@@ -5,6 +5,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // add Orders relation
+
   @Column({ unique: true })
   login: string;
 

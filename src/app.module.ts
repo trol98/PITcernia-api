@@ -5,10 +5,12 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
-// import { AppLoggerMiddleware } from './middle';
+// import { AppLoggerMiddleware } from './testLoggerMiddleware';
+import { OrdersModule } from './orders/orders.module';
+import { PizzaModule } from './pizza/pizza.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UserModule, DatabaseModule],
+  imports: [ConfigModule.forRoot(), AuthModule, UserModule, DatabaseModule, OrdersModule, PizzaModule],
   controllers: [AppController],
   providers: [AppService],
 })

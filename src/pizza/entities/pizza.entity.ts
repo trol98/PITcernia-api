@@ -1,6 +1,12 @@
 import { Topping } from './topping.entity';
-import { Order } from 'src/orders/entities/order.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  OneToMany,
+  JoinTable,
+} from 'typeorm';
 import { PizzaToOrder } from 'src/orders/entities/pizza_order.entity';
 
 @Entity()
@@ -8,13 +14,14 @@ export class Pizza {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(
+  @OneToMany(
     () => PizzaToOrder,
     (orderToPizza: PizzaToOrder) => orderToPizza.pizza,
   )
   orderToPizza: PizzaToOrder[];
 
   @ManyToMany(() => Topping, (topping: Topping) => topping.pizza)
+  @JoinTable()
   toppings: Topping[];
 
   @Column()
@@ -25,4 +32,7 @@ export class Pizza {
 
   @Column()
   size: string;
+
+  @Column()
+  img_path: string;
 }

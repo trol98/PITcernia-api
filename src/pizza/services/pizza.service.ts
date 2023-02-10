@@ -13,7 +13,15 @@ export class PizzaService {
     private toppingRepository: Repository<Topping>,
   ) {}
   async getToppings() {
-    const toppings = await this.toppingRepository.find({});
+    const toppings = await this.toppingRepository.find();
     return toppings;
+  }
+  async getPizzas() {
+    const pizza = await this.pizzaRepository.find({
+      relations: {
+        toppings: true,
+      },
+    });
+    return pizza;
   }
 }

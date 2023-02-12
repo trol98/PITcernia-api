@@ -1,11 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // add Orders relation
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @Column({ unique: true })
   login: string;

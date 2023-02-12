@@ -1,18 +1,21 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { DatabaseModule } from './database/database.module';
-// import { AppLoggerMiddleware } from './testLoggerMiddleware';
 import { OrdersModule } from './orders/orders.module';
 import { PizzaModule } from './pizza/pizza.module';
+import { DatabaseModule } from './database/database.module';
+// import { AppLoggerMiddleware } from './testLoggerMiddleware';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UserModule, DatabaseModule, OrdersModule, PizzaModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    AuthModule,
+    UserModule,
+    DatabaseModule,
+    OrdersModule,
+    PizzaModule,
+  ],
 })
 export class AppModule {}
 

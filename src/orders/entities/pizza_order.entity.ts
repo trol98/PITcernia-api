@@ -15,14 +15,16 @@ export class PizzaToOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // TODO: add user relation
-
   @Column()
   quantity: number;
 
-  @ManyToOne(() => Order, (order: Order) => order.pizzaToOrder)
+  @ManyToOne(() => Order, (order: Order) => order.pizzaToOrder, {
+    eager: true,
+  })
   order: Order;
 
-  @ManyToOne(() => Pizza, (pizza: Pizza) => pizza.orderToPizza)
+  @ManyToOne(() => Pizza, (pizza: Pizza) => pizza.orderToPizza, {
+    eager: true,
+  })
   pizza: Pizza;
 }

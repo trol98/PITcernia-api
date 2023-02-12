@@ -1,10 +1,9 @@
-import { Pizza } from 'src/pizza/entities/pizza.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
 } from 'typeorm';
@@ -15,7 +14,11 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // TODO: add user relation
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
+
+  @Column()
+  userId: number;
 
   @OneToMany(
     () => PizzaToOrder,

@@ -35,4 +35,7 @@ export class Pizza {
 
   @Column()
   img_path: string;
+
+  @Column()
+  description: string;
 }

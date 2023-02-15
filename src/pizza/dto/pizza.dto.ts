@@ -24,4 +24,8 @@ export class PizzaDto {
   @IsString()
   @IsNotEmpty()
   img_path: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }

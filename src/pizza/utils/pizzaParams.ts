@@ -1,11 +1,13 @@
-import { IsNumber, Min, IsOptional } from 'class-validator';
+import { IsNumber, Min, ArrayMinSize } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class PizzaParams {
   @Type(() => String)
+  @ArrayMinSize(1)
   toppings: string[];
 
   @Type(() => String)
+  @ArrayMinSize(1)
   sizes: string[];
 
   @Type(() => Number)

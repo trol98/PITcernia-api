@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
 
 @Injectable()
 export class UserService {
@@ -46,5 +47,41 @@ export class UserService {
       'User with this id does not exist',
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  async updateUser(
+    id: number,
+    newLogin: string | null,
+    newEmail: string | null,
+  ) {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new HttpException(
+        'User with this id does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    try {
+      if (newLogin) {
+        user.login = newLogin;
+      }
+      if (newEmail) {
+        user.email = newEmail;
+      }
+      this.usersRepository.save(user);
+    } catch (error) {
+      if (error?.code === PostgresErrorCode.UniqueViolation) {
+        throw new HttpException(
+          'User with that login or email already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    user.hashed_password = '';
+    return user;
   }
 }

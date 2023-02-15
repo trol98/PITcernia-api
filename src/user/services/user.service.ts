@@ -81,7 +81,8 @@ export class UserService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    user.hashed_password = '';
+
+    user.hashed_password = undefined;
     return user;
   }
 }

@@ -33,7 +33,7 @@ export class PizzaService {
   ) {
     const pizza = await this.pizzaRepository.find({
       where: {
-        prize: Between(minPrize, maxPrize),
+        price: Between(minPrize, maxPrize),
         size: In(sizes),
         toppings: {
           // TODO: Filtering by toppings, isn't working for now

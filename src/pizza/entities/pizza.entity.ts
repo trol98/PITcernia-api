@@ -28,7 +28,7 @@ export class Pizza {
   name: string;
 
   @Column()
-  prize: number;
+  price: number;
 
   @Column()
   size: string;

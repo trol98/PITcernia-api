@@ -15,7 +15,7 @@ export class PizzaDto {
 
   @IsNumber()
   @IsNotEmpty()
-  prize: number;
+  price: number;
 
   @IsString()
   @IsNotEmpty()

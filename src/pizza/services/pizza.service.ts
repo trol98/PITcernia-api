@@ -25,6 +25,18 @@ export class PizzaService {
     return pizza;
   }
 
+  async getPizza(id: number) {
+    const pizza = await this.pizzaRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        toppings: true,
+      },
+    });
+    return pizza;
+  }
+
   async searchPizzas(
     toppings: string[],
     sizes: string[],

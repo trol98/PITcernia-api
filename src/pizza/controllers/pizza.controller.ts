@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PizzaDto } from '../dto/pizza.dto';
 import { ToppingDto } from '../dto/topping.dto';
 import { PizzaService } from '../services/pizza.service';
@@ -10,6 +10,10 @@ export class PizzaController {
   @Get('/')
   async getPizzas(): Promise<PizzaDto[]> {
     return await this.pizzaService.getPizzas();
+  }
+  @Get('/:id')
+  async getPizza(@Param('id') id: number): Promise<PizzaDto> {
+    return await this.pizzaService.getPizza(id);
   }
 
   @Get('/toppings')

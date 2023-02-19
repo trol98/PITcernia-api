@@ -10,7 +10,7 @@ export class CreateOrderDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  userId: number;
+  pizzaId: number;
 
   @IsString()
   @IsNotEmpty()
@@ -23,4 +23,9 @@ export class CreateOrderDto {
   @IsBoolean()
   @IsNotEmpty()
   canceled: boolean;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  quantity: number;
 }

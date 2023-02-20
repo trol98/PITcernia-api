@@ -12,13 +12,4 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   hashed_password: string;
-
-  @IsBoolean()
-  active: boolean;
-
-  @IsBoolean()
-  verified: boolean;
-
-  @IsBoolean()
-  admin: boolean;
 }

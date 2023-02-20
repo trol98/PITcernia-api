@@ -12,13 +12,4 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
-  @IsBoolean()
-  active: boolean;
-
-  @IsBoolean()
-  verified: boolean;
-
-  @IsBoolean()
-  admin: boolean;
 }

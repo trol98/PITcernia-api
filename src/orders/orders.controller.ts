@@ -1,3 +1,4 @@
+import { AdminGuard } from './../auth/admin.guard';
 import { OrdersService } from './services/orders.service';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { CreateOrderDto } from './dto/CreateOrder.dto';
@@ -18,9 +19,10 @@ export class OrdersController {
     return this.orderService.createOrder(request.user.id, createOrderDto);
   }
 
-  // TODO: Add AuthGuard then check: if regular user return only orders made by him,
-  // if admin return all orders
+  // TODO: Create second get route that return only orders belonging to the given user
+
   @Get()
+  @UseGuards(JwtAuthenticationGuard, AdminGuard)
   getOrders() {
     return this.orderService.getOrders();
   }

@@ -20,12 +20,11 @@ export class OrdersService {
 
   // userId comes from the JWT token that came coupled with the request
   async createOrder(userId: number, createOrder: CreateOrderDto) {
-    const { shipping_address, finished, canceled, pizzaId, quantity } =
-      createOrder;
+    const { shipping_address, pizzaId, quantity } = createOrder;
     const order = this.orderRepository.create({
       shipping_address,
-      finished,
-      canceled,
+      finished: false,
+      canceled: false,
       userId,
     });
     await this.orderRepository.save(order);

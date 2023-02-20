@@ -16,13 +16,13 @@ export class CreateOrderDto {
   @IsNotEmpty()
   shipping_address: string;
 
-  @IsBoolean()
-  @IsNotEmpty()
-  finished: boolean;
+  // @IsBoolean()
+  // @IsNotEmpty()
+  // finished: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
-  canceled: boolean;
+  // @IsBoolean()
+  // @IsNotEmpty()
+  // canceled: boolean;
 
   @IsNumber()
   @IsPositive()

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArrayContainedBy, Between, In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { Pizza } from '../entities/pizza.entity';
 import { Topping } from '../entities/topping.entity';
 
@@ -38,14 +38,48 @@ export class PizzaService {
   }
 
   async searchPizzas(
-    toppings: string[],
+    toppingsNames: string[],
     sizes: string[],
-    minPrize: number,
-    maxPrize: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
+    // .where((qb) => {
+    //   const subQuery = qb
+    //     .subQuery()
+    //     .select('topping.name')
+    //     .from(Topping, 'topping')
+    //     // .where('user.registered = :registered')
+    //     .getQuery();
+    //   return subQuery + ' <@  (:...toppings)';
+    // })
+    // .setParameter('toppings', toppings)
+    // const toppingQuery = this.toppingRepository
+    //   .createQueryBuilder('topping')
+    //   .select('topping.name')
+    //   .leftJoin('topping.pizza', 'pizza')
+    //   .where('pizza.id = "pizza"."id"', { pizzaId: 1 });
+
+    // const pizza2 = await this.pizzaRepository
+    //   .createQueryBuilder('pizza')
+    //   .select('pizza.id')
+    //   .leftJoin('pizza.toppings', 'toppings')
+    // .andWhere('pizza.price BETWEEN :minPrice AND :maxPrice', {
+    //   minPrice,
+    //   maxPrice,
+    // })
+    // .andWhere('pizza.size IN (:...sizes)', { sizes })
+    // .where(
+    //   'array(' + toppingQuery.getQuery() + ')::text[] <@ ARRAY[:...toppings]',
+    //   {
+    //     toppings,
+    // pizzaId: 'pizza.id',
+    //   },
+    // );
+
+    // .andWhere('ARRAY[...toppings] @> ARRAY[:...toppings]', { toppings })
     const pizza = await this.pizzaRepository.find({
       where: {
-        price: Between(minPrize, maxPrize),
+        price: Between(minPrice, maxPrice),
         size: In(sizes),
         toppings: {
           // TODO: Filtering by toppings, isn't working for now
@@ -56,14 +90,19 @@ export class PizzaService {
           // https://www.postgresql.org/docs/current/functions-array.html#ARRAY-OPERATORS-TABLE
           // https://stackoverflow.com/questions/11231544/check-if-value-exists-in-postgres-array
           // https://github.com/typeorm/typeorm/blob/master/docs/find-options.md
-
-          name: In(toppings),
+          // name: In(toppings),
         },
       },
       relations: {
         toppings: true,
       },
     });
-    return pizza;
+
+    // TODO: This is a work around becouse for now I'm unable to
+    // filter the pizza by queries to the db
+    return pizza.filter((pizza) => {
+      const names = pizza.toppings.map((topping) => topping.name);
+      return names.every((name) => toppingsNames.includes(name));
+    });
   }
 }

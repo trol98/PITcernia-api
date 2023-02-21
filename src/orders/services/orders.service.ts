@@ -14,6 +14,12 @@ export class OrdersService {
     private pizzaToOrderRepository: Repository<PizzaToOrder>,
   ) {}
 
+  // {
+  //   relations: {
+  //     pizzaToOrder: true,
+  //     user: true,
+  //   },
+  // }
   async getOrders() {
     return await this.orderRepository.find();
   }

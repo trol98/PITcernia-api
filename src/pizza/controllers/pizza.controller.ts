@@ -7,14 +7,6 @@ import PizzaParams from '../utils/pizzaParams';
 @Controller('pizza')
 export class PizzaController {
   constructor(private pizzaService: PizzaService) {}
-  @Get('/')
-  async getPizzas(): Promise<PizzaDto[]> {
-    return await this.pizzaService.getPizzas();
-  }
-  @Get('/:id')
-  async getPizza(@Param('id') id: number): Promise<PizzaDto> {
-    return await this.pizzaService.getPizza(id);
-  }
 
   @Get('/toppings')
   async getToppings(): Promise<ToppingDto[]> {
@@ -31,5 +23,15 @@ export class PizzaController {
       minPrize,
       maxPrize,
     );
+  }
+
+  @Get('/')
+  async getPizzas(): Promise<PizzaDto[]> {
+    return await this.pizzaService.getPizzas();
+  }
+
+  @Get('/:id')
+  async getPizza(@Param('id') id: number): Promise<PizzaDto> {
+    return await this.pizzaService.getPizza(id);
   }
 }

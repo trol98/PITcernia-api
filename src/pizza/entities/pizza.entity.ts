@@ -27,6 +27,13 @@ export class Pizza {
   @Column()
   name: string;
 
+  // {
+  //   type: 'decimal',
+  //   precision: 10,
+  //   scale: 2,
+  //   default: 0.0,
+  //   transformer: new ColumnNumericTransformer(),
+  // }
   @Column()
   price: number;
 

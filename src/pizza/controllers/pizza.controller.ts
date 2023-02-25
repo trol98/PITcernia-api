@@ -15,13 +15,13 @@ export class PizzaController {
 
   @Get('/search')
   async searchPizzas(
-    @Query() { toppings, sizes, minPrize, maxPrize }: PizzaParams,
+    @Query() { toppings, sizes, minPrice, maxPrice }: PizzaParams,
   ): Promise<PizzaDto[]> {
     return await this.pizzaService.searchPizzas(
       toppings,
       sizes,
-      minPrize,
-      maxPrize,
+      minPrice,
+      maxPrice,
     );
   }
 

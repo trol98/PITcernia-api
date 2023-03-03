@@ -4,28 +4,23 @@ import {
   IsNotEmpty,
   IsNumber,
   IsPositive,
+  IsInt,
 } from 'class-validator';
 
 export class CreateOrderDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
+  @IsInt()
   pizzaId: number;
 
   @IsString()
   @IsNotEmpty()
   shipping_address: string;
 
-  // @IsBoolean()
-  // @IsNotEmpty()
-  // finished: boolean;
-
-  // @IsBoolean()
-  // @IsNotEmpty()
-  // canceled: boolean;
-
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
+  @IsInt()
   quantity: number;
 }

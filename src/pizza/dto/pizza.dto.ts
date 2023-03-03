@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ToppingDto } from './topping.dto';
 
 export class PizzaDto {
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   id: number;
 

@@ -60,6 +60,7 @@ export class UserService {
     newEmail: string | null,
   ) {
     const user = await this.usersRepository.findOneBy({ id });
+    // FIXME: delete this check, if the token is valid, the id should be valid
     if (!user) {
       throw new HttpException(
         'User with this id does not exist',

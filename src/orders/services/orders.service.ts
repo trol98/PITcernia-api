@@ -1,9 +1,10 @@
 import { PizzaToOrder } from 'src/orders/entities/pizza_order.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from '../dto/CreateOrder.dto';
 import { Order } from '../entities/order.entity';
+import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
 
 @Injectable()
 export class OrdersService {
@@ -40,7 +41,16 @@ export class OrdersService {
       pizzaId,
       quantity,
     });
-    await this.pizzaToOrderRepository.save(pizzaToOrder);
+    try {
+      await this.pizzaToOrderRepository.save(pizzaToOrder);
+    } catch (error) {
+      if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
+        throw new HttpException(
+          'This pizza does not exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
 
     return order;
   }

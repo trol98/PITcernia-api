@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class ToppingDto {
-  @IsNumber()
+  @IsInt()
   id: number;
 
   @IsNotEmpty()

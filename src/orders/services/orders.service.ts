@@ -15,14 +15,23 @@ export class OrdersService {
     private pizzaToOrderRepository: Repository<PizzaToOrder>,
   ) {}
 
-  // {
-  //   relations: {
-  //     pizzaToOrder: true,
-  //     user: true,
-  //   },
-  // }
   async getOrders() {
-    return await this.orderRepository.find();
+    const q = this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoin('order.user', 'user')
+      .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+      .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza');
+    return await q.getMany();
+  }
+
+  async getUserOrders(id: number) {
+    const q = this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoin('order.user', 'user')
+      .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+      .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
+      .where({ userId: id });
+    return await q.getMany();
   }
 
   // userId comes from the JWT token that came coupled with the request

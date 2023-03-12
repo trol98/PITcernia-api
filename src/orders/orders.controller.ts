@@ -9,7 +9,6 @@ import RequestWithUser from 'src/auth/requestWithUser.interface';
 export class OrdersController {
   constructor(private orderService: OrdersService) {}
 
-  // TODO: Check for creating orders with canceled, finished set by regular users
   @Post('create')
   @UseGuards(JwtAuthenticationGuard)
   createOrder(
@@ -20,8 +19,13 @@ export class OrdersController {
   }
 
   // TODO: Create second get route that return only orders belonging to the given user
-
   @Get()
+  @UseGuards(JwtAuthenticationGuard)
+  getUserOrders(@Req() request: RequestWithUser) {
+    return this.orderService.getUserOrders(request.user.id);
+  }
+
+  @Get('all')
   @UseGuards(JwtAuthenticationGuard, AdminGuard)
   getOrders() {
     return this.orderService.getOrders();

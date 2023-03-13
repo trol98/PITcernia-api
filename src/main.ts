@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
   await app.listen(app.get(ConfigService).get('PORT'));
 }
 bootstrap();

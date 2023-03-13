@@ -18,7 +18,6 @@ export class OrdersController {
     return this.orderService.createOrder(request.user.id, createOrderDto);
   }
 
-  // TODO: Create second get route that return only orders belonging to the given user
   @Get()
   @UseGuards(JwtAuthenticationGuard)
   getUserOrders(@Req() request: RequestWithUser) {

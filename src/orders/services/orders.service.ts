@@ -34,9 +34,16 @@ export class OrdersService {
     return await q.getMany();
   }
 
-  // userId comes from the JWT token that came coupled with the request
   async createOrder(userId: number, createOrder: CreateOrderDto) {
-    const { shipping_address, pizzaId, quantity } = createOrder;
+    const { shipping_address, pizzaLines } = createOrder;
+
+    // FIXME: If creating a PizzaToOrder fails,
+    // do not create an empty order
+    // Try doing it with transactions
+
+    // const q = this.orderRepository.queryRunner;
+    // q.startTransaction();s
+
     const order = this.orderRepository.create({
       shipping_address,
       finished: false,
@@ -45,22 +52,29 @@ export class OrdersService {
     });
     await this.orderRepository.save(order);
 
-    const pizzaToOrder = this.pizzaToOrderRepository.create({
-      orderId: order.id,
-      pizzaId,
-      quantity,
-    });
     try {
-      await this.pizzaToOrderRepository.save(pizzaToOrder);
+      for (const line of pizzaLines) {
+        const pizzaToOrder = this.pizzaToOrderRepository.create({
+          orderId: order.id,
+          pizzaId: line.pizzaId,
+          quantity: line.quantity,
+        });
+        await this.pizzaToOrderRepository.save(pizzaToOrder);
+      }
+      // q.commitTransaction();
     } catch (error) {
+      // q.rollbackTransaction();
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
         throw new HttpException(
-          'This pizza does not exist',
+          'At least one pizza does not exist',
           HttpStatus.BAD_REQUEST,
         );
       }
     }
-
+    // finally {
+    //   // q.release();
+    //   return;
+    // }
     return order;
   }
 }

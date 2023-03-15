@@ -13,7 +13,9 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ forbidUnknownValues: true, transform: true }),
+  );
   await app.listen(app.get(ConfigService).get('PORT'));
 }
 bootstrap();

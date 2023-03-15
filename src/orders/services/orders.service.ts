@@ -24,13 +24,15 @@ export class OrdersService {
     return await q.getMany();
   }
 
-  async getUserOrders(id: number) {
+  async getUserOrders(id: number, isFinished: boolean) {
     const q = this.orderRepository
       .createQueryBuilder('order')
       .leftJoin('order.user', 'user')
       .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
       .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
-      .where({ userId: id });
+      .andWhere({ finished: isFinished })
+      .andWhere({ canceled: false }) // just for safety
+      .andWhere({ userId: id });
     return await q.getMany();
   }
 

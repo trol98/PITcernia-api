@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { OrdersModule } from './orders/orders.module';
 import { PizzaModule } from './pizza/pizza.module';
 import { DatabaseModule } from './database/database.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 // import { AppLoggerMiddleware } from './testLoggerMiddleware';
 
 @Module({
@@ -15,6 +16,10 @@ import { DatabaseModule } from './database/database.module';
     DatabaseModule,
     OrdersModule,
     PizzaModule,
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
   ],
 })
 export class AppModule {}

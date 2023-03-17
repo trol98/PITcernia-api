@@ -23,9 +23,18 @@ export class UserService {
   }
   async getByEmail(email: string) {
     const user = await this.usersRepository.findOneBy({ email });
+    // const user = await this.usersRepository.findOne({
+    //   where: {
+    //     email,
+    //     active: true,
+    //   },
+    // });
+
     if (user) {
       return user;
     }
+    // TODO: Change the response to something more generic so
+    //  it's harder to scan for emails
     throw new HttpException(
       'User with this email does not exist',
       HttpStatus.NOT_FOUND,
@@ -37,6 +46,8 @@ export class UserService {
     if (user) {
       return user;
     }
+    // TODO: Change the response to something more generic so
+    //  it's harder to scan for emails
     throw new HttpException(
       'User with this login does not exist',
       HttpStatus.NOT_FOUND,

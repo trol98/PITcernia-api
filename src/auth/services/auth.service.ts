@@ -5,6 +5,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/user/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -40,6 +41,10 @@ export class AuthService {
     try {
       const user = await this.userService.getByEmail(email);
       await this.verifyPassword(plainTextPassword, user.hashed_password);
+      // TODO: Check if this is the correct place to check for user
+      // being active (user.service.ts maybe ?)
+      await this.verifyIsNotDeleted(user);
+
       user.hashed_password = undefined;
       return user;
     } catch (error) {
@@ -75,6 +80,13 @@ export class AuthService {
         'Wrong credentials provided',
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+
+  private async verifyIsNotDeleted(user: User) {
+    const isActive = user.active;
+    if (!isActive) {
+      throw new HttpException('User deleted', HttpStatus.BAD_REQUEST);
     }
   }
 }

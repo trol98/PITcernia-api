@@ -7,6 +7,6 @@ class OrderParams {
   @Transform(({ value }) => {
     return value === 'true';
   })
-  isFinished: boolean;
+  isActive: boolean;
 }
 export default OrderParams;

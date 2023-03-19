@@ -4,7 +4,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -31,14 +33,20 @@ export class OrdersController {
   @UseGuards(JwtAuthenticationGuard)
   getUserOrders(
     @Req() request: RequestWithUser,
-    @Query() { isFinished }: OrderParams,
+    @Query() { isActive }: OrderParams,
   ) {
-    return this.orderService.getUserOrders(request.user.id, isFinished);
+    return this.orderService.getUserOrders(request.user.id, isActive);
   }
 
   @Get('all')
   @UseGuards(JwtAuthenticationGuard, AdminGuard)
   getOrders() {
     return this.orderService.getOrders();
+  }
+
+  @Put('cancel/:id')
+  @UseGuards(JwtAuthenticationGuard)
+  cancelOrder(@Param('id') id: number, @Req() request: RequestWithUser) {
+    return this.orderService.cancelOrder(id, request.user.id);
   }
 }

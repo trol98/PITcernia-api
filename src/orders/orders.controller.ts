@@ -1,5 +1,9 @@
 import { AdminGuard } from './../auth/admin.guard';
 import { OrdersService } from './services/orders.service';
+import { CreateOrderDto } from './dto/CreateOrder.dto';
+import OrderParams from './utils/orderParams';
+import RequestWithUser from 'src/auth/requestWithUser.interface';
+import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
 import {
   Body,
   Controller,
@@ -11,10 +15,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { CreateOrderDto } from './dto/CreateOrder.dto';
-import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
-import RequestWithUser from 'src/auth/requestWithUser.interface';
-import OrderParams from './utils/orderParams';
 
 @Controller('orders')
 export class OrdersController {
@@ -26,7 +26,8 @@ export class OrdersController {
     @Req() request: RequestWithUser,
     @Body() createOrderDto: CreateOrderDto,
   ) {
-    return this.orderService.createOrder(request.user.id, createOrderDto);
+    const { user } = request;
+    return this.orderService.createOrder(user.id, createOrderDto);
   }
 
   @Get()
@@ -35,7 +36,8 @@ export class OrdersController {
     @Req() request: RequestWithUser,
     @Query() { isActive }: OrderParams,
   ) {
-    return this.orderService.getUserOrders(request.user.id, isActive);
+    const { user } = request;
+    return this.orderService.getUserOrders(user.id, isActive);
   }
 
   @Get('all')
@@ -47,6 +49,7 @@ export class OrdersController {
   @Put('cancel/:id')
   @UseGuards(JwtAuthenticationGuard)
   cancelOrder(@Param('id') id: number, @Req() request: RequestWithUser) {
-    return this.orderService.cancelOrder(id, request.user.id);
+    const { user } = request;
+    return this.orderService.cancelOrder(id, user.id);
   }
 }

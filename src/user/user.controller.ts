@@ -11,7 +11,7 @@ export class UserController {
 
   @UseGuards(JwtAuthenticationGuard)
   @Put('update')
-  async updateUser(
+  updateUser(
     @Req() request: RequestWithUser,
     @Body() userUpdateDto: UserUpdateDto,
   ) {
@@ -21,5 +21,12 @@ export class UserController {
       userUpdateDto.newLogin,
       userUpdateDto.newEmail,
     );
+  }
+
+  @UseGuards(JwtAuthenticationGuard)
+  @Put('delete')
+  deleteUser(@Req() request: RequestWithUser) {
+    const { user } = request;
+    return this.userService.deleteUser(user.id);
   }
 }

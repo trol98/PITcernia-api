@@ -10,10 +10,10 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { LocalAuthenticationGuard } from '../localAuthentication.guard';
-import RequestWithUser from '../requestWithUser.interface';
+import { LocalAuthenticationGuard } from '../guards/localAuthentication.guard';
+import RequestWithUser from '../dto/requestWithUser.interface';
 import { Response } from 'express';
-import JwtAuthenticationGuard from '../jwt-authentication.guard';
+import JwtAuthenticationGuard from '../guards/jwt-authentication.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -53,5 +53,11 @@ export class AuthController {
     const user = request.user;
     user.hashed_password = undefined;
     return user;
+  }
+
+  @Post('verify')
+  async verify(@Req() request: RequestWithUser) {
+    const { user } = request;
+    return this.authenticationService.verifyEmail(user.id);
   }
 }

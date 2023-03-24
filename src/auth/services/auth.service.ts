@@ -82,11 +82,14 @@ export class AuthService {
       );
     }
   }
-
   private async verifyIsNotDeleted(user: User) {
     const isActive = user.active;
     if (!isActive) {
       throw new HttpException('User deleted', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public async verifyEmail(id: number) {
+    // return this.userService.verifyUser();
   }
 }

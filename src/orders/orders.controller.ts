@@ -1,9 +1,9 @@
-import { AdminGuard } from './../auth/admin.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
 import { OrdersService } from './services/orders.service';
 import { CreateOrderDto } from './dto/CreateOrder.dto';
 import OrderParams from './utils/orderParams';
-import RequestWithUser from 'src/auth/requestWithUser.interface';
-import JwtAuthenticationGuard from 'src/auth/jwt-authentication.guard';
+import RequestWithUser from 'src/auth/dto/requestWithUser.interface';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-authentication.guard';
 import {
   Body,
   Controller,

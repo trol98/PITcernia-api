@@ -98,7 +98,7 @@ export class OrdersService {
   }
 
   async cancelOrder(id: number, userId: number) {
-    let order: Order;
+    let order: Order | null;
     try {
       order = await this.orderRepository.findOneBy({
         id,
@@ -107,8 +107,7 @@ export class OrdersService {
     } catch (error) {
       throw new HttpException('Order does not exist', HttpStatus.NOT_FOUND);
     }
-
-    if (order.finished) {
+    if (order == null || order.finished) {
       throw new HttpException(
         'This order has already been finished',
         HttpStatus.BAD_REQUEST,

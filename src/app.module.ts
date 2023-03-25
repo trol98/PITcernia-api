@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 // import { AppLoggerMiddleware } from './testLoggerMiddleware';
 import { EmailConfirmationModule } from './emailConfirmation/emailConfirmation.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { EmailConfirmationModule } from './emailConfirmation/emailConfirmation.m
       limit: 10,
     }),
     EmailConfirmationModule,
+    EmailModule,
   ],
 })
 export class AppModule {}

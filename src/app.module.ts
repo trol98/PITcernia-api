@@ -7,6 +7,7 @@ import { PizzaModule } from './pizza/pizza.module';
 import { DatabaseModule } from './database/database.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 // import { AppLoggerMiddleware } from './testLoggerMiddleware';
+import { EmailConfirmationModule } from './emailConfirmation/emailConfirmation.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       ttl: 60,
       limit: 10,
     }),
+    EmailConfirmationModule,
   ],
 })
 export class AppModule {}

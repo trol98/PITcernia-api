@@ -1,3 +1,4 @@
+import { EmailConfirmationService } from './../../emailConfirmation/emailConfirmation.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
 import { UserService } from 'src/user/services/user.service';
@@ -12,6 +13,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
   public async register(registrationData: RegisterDto) {
@@ -23,6 +25,9 @@ export class AuthService {
         hashed_password: hashedPassword,
       });
       createdUser.hashed_password = undefined;
+      await this.emailConfirmationService.sendVerificationLink(
+        createdUser.email,
+      );
       return createdUser;
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {

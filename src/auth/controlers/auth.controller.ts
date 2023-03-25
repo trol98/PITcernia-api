@@ -54,10 +54,4 @@ export class AuthController {
     user.hashed_password = undefined;
     return user;
   }
-
-  @Post('verify')
-  async verify(@Req() request: RequestWithUser) {
-    const { user } = request;
-    return this.authenticationService.verifyEmail(user.id);
-  }
 }

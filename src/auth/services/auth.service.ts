@@ -1,12 +1,13 @@
-import { EmailConfirmationService } from './../../emailConfirmation/emailConfirmation.service';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
-import { UserService } from 'src/user/services/user.service';
-import { RegisterDto } from '../dto/register.dto';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { RegisterDto } from '../dto/register.dto';
+import { UserService } from 'src/user/services/user.service';
+import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EmailConfirmationService } from './../../emailConfirmation/emailConfirmation.service';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -94,7 +95,7 @@ export class AuthService {
     }
   }
 
-  public async verifyEmail(id: number) {
-    // return this.userService.verifyUser();
-  }
+  // public async verifyEmail(id: number) {
+  //   // return this.userService.verifyUser();
+  // }
 }

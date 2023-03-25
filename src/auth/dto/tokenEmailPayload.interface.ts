@@ -1,3 +1,0 @@
-interface TokenEmailPayload {
-  email: string;
-}

@@ -8,14 +8,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
-  markEmailAsConfirmed(email: string) {
-    return this.usersRepository.update(
-      { email },
-      {
-        verified: true,
-      },
-    );
-  }
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -138,5 +130,14 @@ export class UserService {
       user.hashed_password = undefined;
       return user;
     }
+  }
+
+  markEmailAsConfirmed(email: string) {
+    return this.usersRepository.update(
+      { email },
+      {
+        verified: true,
+      },
+    );
   }
 }

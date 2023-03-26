@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import VerificationTokenPayload from './verificationTokenPayload.interface';
 import { UserService } from '../user/services/user.service';
+import EmailService from 'src/email/email.service';
 // import EmailService from '../email/email.service';
 
 @Injectable()
@@ -10,7 +11,7 @@ export class EmailConfirmationService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    // private readonly emailService: EmailService,
+    private readonly emailService: EmailService,
     private readonly usersService: UserService,
   ) {}
 
@@ -27,14 +28,15 @@ export class EmailConfirmationService {
       'EMAIL_CONFIRMATION_URL',
     )}?token=${token}`;
 
+    // TODO: Replace this plain text message with html
     const text = `Welcome to the application. To confirm the email address, click here: ${url}`;
 
-    // return this.emailService.sendMail({
-    //   to: email,
-    //   subject: 'Email confirmation',
-    //   text,
-    // });
-    console.log(url);
+    return this.emailService.sendMail({
+      to: email,
+      subject: 'Email confirmation',
+      // html: '<h1>Hello world</h1>',
+      text,
+    });
   }
 
   //   public async resendConfirmationLink(userId: number) {

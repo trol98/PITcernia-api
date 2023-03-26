@@ -17,7 +17,6 @@ export class EmailConfirmationController {
   ) {}
 
   @Post('confirm')
-  // @Query() { toppings, sizes, minPrice, maxPrice }: ConfirmEmailDto
   async confirm(@Query() { token }: ConfirmEmailDto) {
     const email = await this.emailConfirmationService.decodeConfirmationToken(
       token,

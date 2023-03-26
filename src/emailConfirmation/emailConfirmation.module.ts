@@ -1,3 +1,4 @@
+import { EmailModule } from './../email/email.module';
 import { EmailConfirmationController } from './emailConfirmation.controller';
 import { UserModule } from './../user/user.module';
 import { EmailConfirmationService } from './emailConfirmation.service';
@@ -23,6 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
     ConfigModule,
     UserModule,
+    EmailModule,
   ],
   controllers: [EmailConfirmationController],
 })

@@ -15,6 +15,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: '' })
+  shipping_address: string;
+
   @Column()
   hashed_password: string;
 

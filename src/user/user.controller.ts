@@ -20,6 +20,7 @@ export class UserController {
       user.id,
       userUpdateDto.newLogin,
       userUpdateDto.newEmail,
+      userUpdateDto.shipping_address,
     );
   }
 

@@ -71,6 +71,7 @@ export class UserService {
     id: number,
     newLogin: string | null,
     newEmail: string | null,
+    shipping_address: string | null,
   ) {
     const user = await this.usersRepository.findOneBy({ id });
     // FIXME: delete this check, if the token is valid, the id should be valid
@@ -86,6 +87,9 @@ export class UserService {
       }
       if (newEmail) {
         user.email = newEmail;
+      }
+      if (shipping_address) {
+        user.shipping_address = shipping_address;
       }
       this.usersRepository.save(user);
     } catch (error) {

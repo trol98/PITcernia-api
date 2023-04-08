@@ -15,13 +15,38 @@ export class OrdersService {
     private pizzaToOrderRepository: Repository<PizzaToOrder>,
   ) {}
 
-  async getOrders() {
-    const q = this.orderRepository
-      .createQueryBuilder('order')
-      .leftJoin('order.user', 'user')
-      .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
-      .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza');
-    return await q.getMany();
+  async getOrders(isActive: boolean) {
+    // const q = this.orderRepository
+    //   .createQueryBuilder('order')
+    //   .leftJoin('order.user', 'user')
+    //   .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+    //   .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza');
+    // return await q.getMany();
+
+    if (isActive) {
+      // return active orders
+      const q = this.orderRepository
+        .createQueryBuilder('order')
+        .leftJoinAndSelect('order.user', 'user')
+        .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+        .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
+        .andWhere({ finished: false })
+        .andWhere({ canceled: false });
+      return await q.getMany();
+    } else {
+      // return orders that were either canceled or finished
+      const q = this.orderRepository
+        .createQueryBuilder('order')
+        .leftJoinAndSelect('order.user', 'user')
+        .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+        .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
+        .andWhere(
+          new Brackets((sub) => {
+            sub.andWhere({ finished: true }).orWhere({ canceled: true });
+          }),
+        );
+      return await q.getMany();
+    }
   }
 
   async getUserOrders(id: number, isActive: boolean) {

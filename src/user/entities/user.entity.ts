@@ -18,7 +18,7 @@ export class User {
   @Column({ default: '' })
   shipping_address: string;
 
-  @Column()
+  @Column({ select: false })
   hashed_password: string;
 
   @Column()

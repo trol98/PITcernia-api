@@ -24,13 +24,20 @@ export class UserService {
     return newUser;
   }
   async getByEmail(email: string) {
-    const user = await this.usersRepository.findOneBy({ email });
-    // const user = await this.usersRepository.findOne({
-    //   where: {
-    //     email,
-    //     active: true,
-    //   },
-    // });
+    const q = this.usersRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.login',
+        'user.email',
+        'user.shipping_address',
+        'user.hashed_password',
+        'user.active',
+        'user.verified',
+        'user.admin',
+      ])
+      .where({ email, active: true });
+    const user = await q.getOne();
 
     if (user) {
       return user;
@@ -44,6 +51,8 @@ export class UserService {
   }
 
   async getByLogin(login: string) {
+    // TODO: Think about converting to queryBuilder
+    // to include hashed_password in the output
     const user = await this.usersRepository.findOneBy({ login });
     if (user) {
       return user;
@@ -57,6 +66,8 @@ export class UserService {
   }
 
   async getByID(id: number) {
+    // TODO: Think about converting to queryBuilder
+    // to include hashed_password in the output
     const user = await this.usersRepository.findOneBy({ id });
     if (user) {
       return user;

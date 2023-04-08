@@ -42,8 +42,8 @@ export class OrdersController {
 
   @Get('all')
   @UseGuards(JwtAuthenticationGuard, AdminGuard)
-  getOrders() {
-    return this.orderService.getOrders();
+  getOrders(@Query() { isActive }: OrderParams) {
+    return this.orderService.getOrders(isActive);
   }
 
   @Put('cancel/:id')

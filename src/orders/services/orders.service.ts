@@ -98,16 +98,14 @@ export class OrdersService {
   }
 
   async cancelOrder(id: number, userId: number) {
-    let order: Order | null;
-    try {
-      order = await this.orderRepository.findOneBy({
-        id,
-        userId,
-      });
-    } catch (error) {
+    const order = await this.orderRepository.findOneBy({
+      id,
+      userId,
+    });
+
+    if (order == null) {
       throw new HttpException('Order does not exist', HttpStatus.NOT_FOUND);
-    }
-    if (order == null || order.finished) {
+    } else if (order.finished) {
       throw new HttpException(
         'This order has already been finished',
         HttpStatus.BAD_REQUEST,
@@ -116,5 +114,25 @@ export class OrdersService {
       order.canceled = true;
       this.orderRepository.save(order);
     }
+
+    return order;
+  }
+
+  async finishOrder(id: number) {
+    const order = await this.orderRepository.findOneBy({
+      id,
+    });
+    if (order == null) {
+      throw new HttpException('Order does not exist', HttpStatus.NOT_FOUND);
+    } else if (order.canceled) {
+      throw new HttpException(
+        'This order has already been canceled',
+        HttpStatus.BAD_REQUEST,
+      );
+    } else {
+      order.finished = true;
+      this.orderRepository.save(order);
+    }
+    return order;
   }
 }

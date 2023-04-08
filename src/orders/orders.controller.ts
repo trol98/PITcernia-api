@@ -52,4 +52,10 @@ export class OrdersController {
     const { user } = request;
     return this.orderService.cancelOrder(id, user.id);
   }
+
+  @Put('finish/:id')
+  @UseGuards(JwtAuthenticationGuard, AdminGuard)
+  finishOrder(@Param('id') id: number) {
+    return this.orderService.finishOrder(id);
+  }
 }

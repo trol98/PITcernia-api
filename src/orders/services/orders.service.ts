@@ -15,13 +15,11 @@ export class OrdersService {
     private pizzaToOrderRepository: Repository<PizzaToOrder>,
   ) {}
 
-  async getOrders(isActive: boolean) {
-    // const q = this.orderRepository
-    //   .createQueryBuilder('order')
-    //   .leftJoin('order.user', 'user')
-    //   .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
-    //   .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza');
-    // return await q.getMany();
+  async getOrders(isActive: boolean, before: Date, after: Date) {
+    const params = {
+      after: after.toISOString(),
+      before: before.toISOString(),
+    };
 
     if (isActive) {
       // return active orders
@@ -31,7 +29,10 @@ export class OrdersService {
         .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
         .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
         .andWhere({ finished: false })
-        .andWhere({ canceled: false });
+        .andWhere({ canceled: false })
+        .andWhere(`DATE_TRUNC('day', "order_date") >= :after`)
+        .andWhere(`DATE_TRUNC('day', "order_date") <= :before`)
+        .setParameters(params);
       return await q.getMany();
     } else {
       // return orders that were either canceled or finished
@@ -44,7 +45,10 @@ export class OrdersService {
           new Brackets((sub) => {
             sub.andWhere({ finished: true }).orWhere({ canceled: true });
           }),
-        );
+        )
+        .andWhere(`DATE_TRUNC('day', "order_date") >= :after`)
+        .andWhere(`DATE_TRUNC('day', "order_date") <= :before`)
+        .setParameters(params);
       return await q.getMany();
     }
   }

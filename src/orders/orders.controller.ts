@@ -15,6 +15,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import OrderWithDateParams from './utils/orderWithDateParams';
 
 @Controller('orders')
 export class OrdersController {
@@ -42,8 +43,8 @@ export class OrdersController {
 
   @Get('all')
   @UseGuards(JwtAuthenticationGuard, AdminGuard)
-  getOrders(@Query() { isActive }: OrderParams) {
-    return this.orderService.getOrders(isActive);
+  getOrders(@Query() { isActive, before, after }: OrderWithDateParams) {
+    return this.orderService.getOrders(isActive, before, after);
   }
 
   @Put('cancel/:id')

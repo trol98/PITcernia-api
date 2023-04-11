@@ -28,14 +28,14 @@ export class EmailConfirmationService {
       'EMAIL_CONFIRMATION_URL',
     )}?token=${token}`;
 
-    // TODO: Replace this plain text message with html
-    const text = `Welcome to the application. To confirm the email address, click here: ${url}`;
-
     return this.emailService.sendMail({
       to: email,
       subject: 'Email confirmation',
-      // html: '<h1>Hello world</h1>',
-      text,
+      html: `
+      <h3>Hello!</h3>
+      <h5>Please use this <a href="${url}">link</a> to confirm your email address.</h5>
+      <p>If you didn't create an account, you can safely ignore this message.</p>
+  `,
     });
   }
 

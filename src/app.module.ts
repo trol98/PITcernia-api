@@ -9,6 +9,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 // import { AppLoggerMiddleware } from './testLoggerMiddleware';
 import { EmailConfirmationModule } from './emailConfirmation/emailConfirmation.module';
 import { EmailModule } from './email/email.module';
+import { PasswordResetModule } from './passwordReset/passwordReset.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EmailModule } from './email/email.module';
     }),
     EmailConfirmationModule,
     EmailModule,
+    PasswordResetModule,
   ],
 })
 export class AppModule {}

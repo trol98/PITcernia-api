@@ -31,6 +31,12 @@ export class OrdersController {
     return this.orderService.createOrder(user.id, createOrderDto);
   }
 
+  @Get('details/:id')
+  @UseGuards(JwtAuthenticationGuard, AdminGuard)
+  getOrder(@Param('id') id: number) {
+    return this.orderService.getOrder(id);
+  }
+
   @Get()
   @UseGuards(JwtAuthenticationGuard)
   getUserOrders(

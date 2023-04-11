@@ -164,4 +164,18 @@ export class OrdersService {
     }
     return order;
   }
+
+  async getOrder(id: number) {
+    const q = this.orderRepository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.user', 'user')
+      .leftJoinAndSelect('order.pizzaToOrder', 'pizzaToOrder')
+      .leftJoinAndSelect('pizzaToOrder.pizza', 'pizza')
+      .andWhere({ id });
+    try {
+      return await q.getOneOrFail();
+    } catch (error) {
+      throw new HttpException('Order does not exist', HttpStatus.BAD_REQUEST);
+    }
+  }
 }

@@ -35,7 +35,8 @@ export class EmailConfirmationService {
       <h3>Hello!</h3>
       <h5>Please use this <a href="${url}">link</a> to confirm your email address.</h5>
       <p>If you didn't create an account, you can safely ignore this message.</p>
-  `,
+      <p>${url}</p>
+      `,
     });
   }
 

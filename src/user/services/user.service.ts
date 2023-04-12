@@ -5,6 +5,7 @@ import { OrdersService } from './../../orders/services/orders.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -154,5 +155,24 @@ export class UserService {
         verified: true,
       },
     );
+  }
+
+  async updatePassword(id: number, password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user.active) {
+      throw new HttpException(
+        'User with this id does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    this.usersRepository.update(
+      { id },
+      {
+        hashed_password: hashedPassword,
+      },
+    );
+    return true;
   }
 }

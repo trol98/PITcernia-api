@@ -1,7 +1,15 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class PasswordResetDto {
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
+  @IsString()
+  token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Matches(
+    /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/,
+    { message: 'Weak password' },
+  )
+  password: string;
 }

@@ -38,9 +38,27 @@ export class PasswordResetService {
                   <h3>Hello ${user.login}!</h3>
                   <h5>Please use this <a href="${resetLink}">link</a> to reset your password.</h5>
                   <p>If you didn't issues this password reset, you can safely ignore this message.</p>
-              `,
+                  <p>${resetLink}</p>
+                  `,
     });
-    console.log(resetLink);
     return user;
+  }
+
+  public async decodeResetToken(token: string) {
+    try {
+      const payload: ResetTokenPayload = await this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_RESET_TOKEN_SECRET'),
+      });
+
+      if (typeof payload === 'object' && 'id' in payload) {
+        return payload.id;
+      }
+      throw new BadRequestException();
+    } catch (error) {
+      if (error?.name === 'TokenExpiredError') {
+        throw new BadRequestException('Password reset token expired');
+      }
+      throw new BadRequestException('Bad reset token');
+    }
   }
 }

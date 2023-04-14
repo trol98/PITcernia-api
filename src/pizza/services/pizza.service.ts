@@ -106,7 +106,7 @@ export class PizzaService {
 
     return pizza.filter((pizza) => {
       const names = pizza.toppings.map((topping) => topping.name);
-      return names.every((name) => toppingsNames.includes(name));
+      return toppingsNames.every((name) => names.includes(name));
     });
   }
 }

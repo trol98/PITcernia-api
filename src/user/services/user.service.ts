@@ -175,4 +175,31 @@ export class UserService {
     );
     return true;
   }
+
+  async changePassword(id: number, old_password: string, password: string) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.hashed_password', 'user.active'])
+      .where({ id })
+      .getOne();
+    if (!user.active) {
+      throw new HttpException(
+        'User with this id does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const newHashedPassword = await bcrypt.hash(password, 10);
+    const match = await bcrypt.compare(old_password, user.hashed_password);
+    if (!match) {
+      throw new HttpException('Incorrect password', HttpStatus.BAD_REQUEST);
+    }
+    this.usersRepository.update(
+      { id },
+      {
+        hashed_password: newHashedPassword,
+      },
+    );
+    return true;
+  }
 }

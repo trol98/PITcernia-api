@@ -66,12 +66,12 @@ export class AuthService {
     // TODO: For production consider adding the Secure option and/or
     // additional security related options
     const expiration = this.configService.get('JWT_EXPIRATION_TIME');
-    return `Authentication=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${expiration}`;
+    return `Authentication=${token}; HttpOnly; SameSite=None; Secure; Path=/; Max-Age=${expiration}`;
   }
   public getCookieForLogOut() {
     // TODO: For production consider adding the Secure option and/or
     // additional security related options
-    return `Authentication=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
+    return `Authentication=; HttpOnly; SameSite=None; Secure; Path=/; Max-Age=0`;
   }
   private async verifyPassword(
     plainTextPassword: string,

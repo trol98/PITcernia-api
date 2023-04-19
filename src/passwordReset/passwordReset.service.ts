@@ -14,7 +14,7 @@ export class PasswordResetService {
     private readonly usersService: UserService,
   ) {}
 
-  async sendEmail(email: string) {
+  async sendResetEmail(email: string) {
     const user = await this.usersService.getByEmail(email);
     user.hashed_password = undefined;
     if (!user) {
@@ -28,10 +28,10 @@ export class PasswordResetService {
       )}s`,
     });
     const resetLink = `${this.configService.get(
-      'EMAIL_PASSWORD_RESET_URL',
-    )}?token=${token}`;
+      'CLIENT_HOST',
+    )}/#/reset?token=${token}`;
 
-    await this.emailService.sendMail({
+    return this.emailService.sendMail({
       to: email,
       subject: 'Forgot Password',
       html: `
@@ -41,7 +41,6 @@ export class PasswordResetService {
                   <p>${resetLink}</p>
                   `,
     });
-    return user;
   }
 
   public async decodeResetToken(token: string) {

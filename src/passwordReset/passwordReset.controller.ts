@@ -14,8 +14,10 @@ export class PasswordResetController {
     private userService: UserService,
   ) {}
   @Post('send-email')
-  sendEmail(@Body() passwordForgotDto: PasswordForgotDto) {
-    return this.passwordResetService.sendEmail(passwordForgotDto.email);
+  async endEmail(@Body() passwordForgotDto: PasswordForgotDto) {
+    return await this.passwordResetService.sendResetEmail(
+      passwordForgotDto.email,
+    );
   }
 
   @Post('reset')

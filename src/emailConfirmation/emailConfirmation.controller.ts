@@ -3,7 +3,6 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   Post,
-  Body,
   Query,
 } from '@nestjs/common';
 import ConfirmEmailDto from './confirmEmail.dto';
@@ -23,10 +22,4 @@ export class EmailConfirmationController {
     );
     await this.emailConfirmationService.confirmEmail(email);
   }
-
-  //   @Post('resend-confirmation-link')
-  //   @UseGuards(JwtAuthenticationGuard)
-  //   async resendConfirmationLink(@Req() request: RequestWithUser) {
-  //     await this.emailConfirmationService.resendConfirmationLink(request.user.id);
-  //   }
 }

@@ -54,6 +54,7 @@ export class AuthService {
       user.hashed_password = undefined;
       return user;
     } catch (error) {
+      // TODO: Maybe change error code?
       throw new HttpException(
         'Wrong credentials provided',
         HttpStatus.BAD_REQUEST,
@@ -63,14 +64,10 @@ export class AuthService {
   public getCookieWithJwtToken(userId: number) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);
-    // TODO: For production consider adding the Secure option and/or
-    // additional security related options
     const expiration = this.configService.get('JWT_EXPIRATION_TIME');
     return `Authentication=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${expiration}`;
   }
   public getCookieForLogOut() {
-    // TODO: For production consider adding the Secure option and/or
-    // additional security related options
     return `Authentication=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
   }
   private async verifyPassword(
@@ -82,6 +79,7 @@ export class AuthService {
       hashedPassword,
     );
     if (!isPasswordMatching) {
+      // TODO: Maybe change error code?
       throw new HttpException(
         'Wrong credentials provided',
         HttpStatus.BAD_REQUEST,
@@ -90,12 +88,9 @@ export class AuthService {
   }
   private async verifyIsNotDeleted(user: User) {
     const isActive = user.active;
+    // TODO: Maybe change error code?
     if (!isActive) {
       throw new HttpException('User deleted', HttpStatus.BAD_REQUEST);
     }
   }
-
-  // public async verifyEmail(id: number) {
-  //   // return this.userService.verifyUser();
-  // }
 }

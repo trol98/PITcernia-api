@@ -1,7 +1,7 @@
 import { PizzaToOrder } from 'src/orders/entities/pizza_order.entity';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, DataSource, Repository } from 'typeorm';
 import { CreateOrderDto } from '../dto/CreateOrder.dto';
 import { Order } from '../entities/order.entity';
 import { PostgresErrorCode } from 'src/database/postgresErrorCode.enum';
@@ -13,6 +13,7 @@ export class OrdersService {
     private orderRepository: Repository<Order>,
     @InjectRepository(PizzaToOrder)
     private pizzaToOrderRepository: Repository<PizzaToOrder>,
+    private dataSource: DataSource,
   ) {}
 
   async getOrders(isActive: boolean, before: Date, after: Date) {
@@ -85,44 +86,37 @@ export class OrdersService {
   async createOrder(userId: number, createOrder: CreateOrderDto) {
     const { shipping_address, pizzaLines } = createOrder;
 
-    // FIXME: If creating a PizzaToOrder fails,
-    // do not create an empty order
-    // Try doing it with transactions
-
-    // const q = this.orderRepository.queryRunner;
-    // q.startTransaction();s
-
-    const order = this.orderRepository.create({
+    const q = this.dataSource.createQueryRunner();
+    await q.startTransaction();
+    const order = q.manager.create(Order, {
       shipping_address,
       finished: false,
       canceled: false,
       userId,
     });
-    await this.orderRepository.save(order);
+    await q.manager.save(order);
 
     try {
       for (const line of pizzaLines) {
-        const pizzaToOrder = this.pizzaToOrderRepository.create({
+        const pizzaToOrder = q.manager.create(PizzaToOrder, {
           orderId: order.id,
           pizzaId: line.pizzaId,
           quantity: line.quantity,
         });
-        await this.pizzaToOrderRepository.save(pizzaToOrder);
+        await q.manager.save(pizzaToOrder);
       }
-      // q.commitTransaction();
+      await q.commitTransaction();
     } catch (error) {
-      // q.rollbackTransaction();
+      await q.rollbackTransaction();
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
         throw new HttpException(
           'At least one pizza does not exist',
           HttpStatus.BAD_REQUEST,
         );
       }
+    } finally {
+      q.release();
     }
-    // finally {
-    //   // q.release();
-    //   return;
-    // }
     return order;
   }
 

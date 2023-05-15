@@ -43,57 +43,18 @@ export class PizzaService {
     minPrice: number,
     maxPrice: number,
   ) {
-    // .where((qb) => {
-    //   const subQuery = qb
-    //     .subQuery()
-    //     .select('topping.name')
-    //     .from(Topping, 'topping')
-    //     // .where('user.registered = :registered')
-    //     .getQuery();
-    //   return subQuery + ' <@  (:...toppings)';
-    // })
-    // .setParameter('toppings', toppings)
-    // const toppingQuery = this.toppingRepository
-    //   .createQueryBuilder('topping')
-    //   .select('topping.name')
-    //   .leftJoin('topping.pizza', 'pizza')
-    //   .where('pizza.id = "pizza"."id"', { pizzaId: 1 });
-
-    // const pizza2 = await this.pizzaRepository
-    //   .createQueryBuilder('pizza')
-    //   .select('pizza.id')
-    //   .leftJoin('pizza.toppings', 'toppings')
-    // .andWhere('pizza.price BETWEEN :minPrice AND :maxPrice', {
-    //   minPrice,
-    //   maxPrice,
-    // })
-    // .andWhere('pizza.size IN (:...sizes)', { sizes })
-    // .where(
-    //   'array(' + toppingQuery.getQuery() + ')::text[] <@ ARRAY[:...toppings]',
-    //   {
-    //     toppings,
-    // pizzaId: 'pizza.id',
-    //   },
-    // );
-
-    // .andWhere('ARRAY[...toppings] @> ARRAY[:...toppings]', { toppings })
     const pizza = await this.pizzaRepository.find({
       where: {
         price: Between(minPrice, maxPrice),
 
         // if no sizes were given, don't filter by size
         size: sizes ? In(sizes) : Raw('size'),
-        // toppings: {
-        // FIXME: Filtering by toppings, isn't working for now
-        // Look into dealing with this with ArrayContainedBy or with Raw operators
-        // if this doesn't work look into the possibility of using QuaryBuilder
+        // FIXME: Look into dealing with this with ArrayContainedBy or with Raw operators
+        // if this doesn't work look into the possibility of using QueryBuilder
         // Raw Postgres queries
-        // or o it manually on the backend with Typescript
         // https://www.postgresql.org/docs/current/functions-array.html#ARRAY-OPERATORS-TABLE
         // https://stackoverflow.com/questions/11231544/check-if-value-exists-in-postgres-array
         // https://github.com/typeorm/typeorm/blob/master/docs/find-options.md
-        // name: In(toppings),
-        // },
       },
       relations: {
         toppings: true,

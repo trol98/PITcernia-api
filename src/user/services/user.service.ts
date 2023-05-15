@@ -45,6 +45,7 @@ export class UserService {
     }
     // TODO: Change the response to something more generic so
     //  it's harder to scan for emails
+    // TODO: Maybe change error code?
     throw new HttpException(
       'User with this email does not exist',
       HttpStatus.NOT_FOUND,
@@ -60,6 +61,7 @@ export class UserService {
     }
     // TODO: Change the response to something more generic so
     //  it's harder to scan for emails
+    // TODO: Maybe change error code?
     throw new HttpException(
       'User with this login does not exist',
       HttpStatus.NOT_FOUND,
@@ -73,6 +75,7 @@ export class UserService {
     if (user) {
       return user;
     }
+    // TODO: Maybe change error code?
     throw new HttpException(
       'User with this id does not exist',
       HttpStatus.NOT_FOUND,
@@ -86,8 +89,9 @@ export class UserService {
     shipping_address: string | null,
   ) {
     const user = await this.usersRepository.findOneBy({ id });
-    // FIXME: delete this check, if the token is valid, the id should be valid
+
     if (!user) {
+      // TODO: Maybe change error code?
       throw new HttpException(
         'User with this id does not exist',
         HttpStatus.NOT_FOUND,
@@ -124,7 +128,6 @@ export class UserService {
   async deleteUser(id: number) {
     const user = await this.usersRepository.findOneBy({ id });
 
-    // FIXME: delete this check, if the token is valid, the id should be valid
     if (!user) {
       throw new HttpException(
         'User with this id does not exist',
@@ -136,7 +139,7 @@ export class UserService {
 
     if (userOrders.length > 0) {
       throw new HttpException(
-        'User with this id does have active orders',
+        'Some orders are still active',
         HttpStatus.BAD_REQUEST,
       );
     } else {
@@ -191,6 +194,7 @@ export class UserService {
 
     const newHashedPassword = await bcrypt.hash(password, 10);
     const match = await bcrypt.compare(old_password, user.hashed_password);
+    // TODO: Maybe change error code?
     if (!match) {
       throw new HttpException('Incorrect password', HttpStatus.BAD_REQUEST);
     }

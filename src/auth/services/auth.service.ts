@@ -68,7 +68,7 @@ export class AuthService {
     return `Authentication=${token}; HttpOnly; SameSite=None; Secure; Path=/; Max-Age=${expiration}`;
   }
   public getCookieForLogOut() {
-    return `Authentication=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
+    return `Authentication=; HttpOnly; SameSite=None; Secure; Path=/; Max-Age=0`;
   }
   private async verifyPassword(
     plainTextPassword: string,

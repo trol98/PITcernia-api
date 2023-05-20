@@ -24,6 +24,10 @@
 
 ## Description
 
+Checkout [frontend](https://github.com/trol98/PITcernia)
+
+![](https://github.com/trol98/PITcernia-api/blob/main/res/back.jpeg)
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
